@@ -1,0 +1,19 @@
+﻿<Window x:Class="StudentMailOrganizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentMailOrganizer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="494.59" Width="848.607" ResizeMode="NoResize">
+    <Grid>
+        <ListBox x:Name="CategoryList" HorizontalAlignment="Left" Height="422" Margin="10,32,0,0" ItemsSource="{Binding Categories}" VerticalAlignment="Top" Width="225" SnapsToDevicePixels="True"/>
+        <ListBox x:Name="CategoryEmails" HorizontalAlignment="Left" Height="168" Margin="240,32,0,0" ItemsSource="{Binding CategoryItems}" VerticalAlignment="Top" Width="407"/>
+        <Calendar HorizontalAlignment="Left" Margin="652,32,0,0" VerticalAlignment="Top" SelectedDate="{Binding SelectedDate}" Height="168"/>
+        <TextBox x:Name="EmailSender" HorizontalAlignment="Left" Height="21" Margin="306,202,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Sender}" VerticalAlignment="Top" Width="525" IsEnabled="False"/>
+        <TextBox x:Name="EmailTopic" HorizontalAlignment="Left" Height="21" Margin="306,228,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Topic}" VerticalAlignment="Top" Width="525" IsEnabled="False"/>
+        <TextBox x:Name="EmailMessage" HorizontalAlignment="Left" Height="200" Margin="240,254,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Body}" VerticalAlignment="Top" Width="591" IsEnabled="False"/>
+        <Label x:Name="label" Content="Nadawca:" HorizontalAlignment="Left" Margin="237,202,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy" Content="Temat:" HorizontalAlignment="Left" Margin="252,223,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>
