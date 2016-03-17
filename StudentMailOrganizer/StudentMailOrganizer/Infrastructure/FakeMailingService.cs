@@ -115,7 +115,7 @@ namespace StudentMailOrganizer.Infrastructure
 
         public IEnumerable<MailMessage> GetAllMessages()
         {
-            throw new NotImplementedException();
+            return _messages;
         }
 
         public bool SendMessage(MailMessage email)

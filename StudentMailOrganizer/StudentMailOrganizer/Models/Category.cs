@@ -10,7 +10,7 @@ namespace StudentMailOrganizer.Models
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }
-        public IEnumerable<MailMessage> CategoryItems { get; set; }
-        public IEnumerable<string> AcceptedEmails { get; set; }
+        public List<MailMessage> Mails { get; set; }
+        public List<string> AcceptedEmails { get; set; }
     }
 }
