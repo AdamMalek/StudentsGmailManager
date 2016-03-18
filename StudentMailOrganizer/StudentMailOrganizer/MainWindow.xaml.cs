@@ -32,6 +32,11 @@ namespace StudentMailOrganizer
             var vm = new MainWindowViewModel();
             this.DataContext = vm;
         }
-        
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (MainWindowViewModel)DataContext;
+            vm.XD();
+        }
     }
 }

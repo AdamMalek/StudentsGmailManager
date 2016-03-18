@@ -15,14 +15,14 @@ namespace StudentMailOrganizer.Infrastructure
         {
             MailMessage m0 = new MailMessage
             {
-                MessageId = 0,
+                Id = 0,
                 Body = "Mail 0",
                 Sender = "admin1@admin.com",
                 Topic = "Test Mail 0"
             };
             MailMessage m1 = new MailMessage
             {
-                MessageId = 1,
+                Id = 1,
                 Body = "Mail 1",
                 Sender = "admin2@admin.com",
                 Topic = "Test Mail 1"
@@ -30,7 +30,7 @@ namespace StudentMailOrganizer.Infrastructure
 
             MailMessage m2 = new MailMessage
             {
-                MessageId = 2,
+                Id = 2,
                 Body = "Mail 2",
                 Sender = "admin3@admin.com",
                 Topic = "Test Mail 2"
@@ -38,7 +38,7 @@ namespace StudentMailOrganizer.Infrastructure
 
             MailMessage m3 = new MailMessage
             {
-                MessageId = 3,
+                Id = 3,
                 Body = "Mail 3",
                 Sender = "admin@admin.com",
                 Topic = "Test Mail 3"
@@ -46,7 +46,7 @@ namespace StudentMailOrganizer.Infrastructure
 
             MailMessage m4 = new MailMessage
             {
-                MessageId = 4,
+                Id = 4,
                 Body = "Mail 4",
                 Sender = "admin1@admin.com",
                 Topic = "Test Mail 4"
@@ -54,7 +54,7 @@ namespace StudentMailOrganizer.Infrastructure
 
             MailMessage m5 = new MailMessage
             {
-                MessageId = 5,
+                Id = 5,
                 Body = "Mail 5",
                 Sender = "admin2@admin.com",
                 Topic = "Test Mail 5"
@@ -62,7 +62,7 @@ namespace StudentMailOrganizer.Infrastructure
 
             MailMessage m6 = new MailMessage
             {
-                MessageId = 6,
+                Id = 6,
                 Body = "Mail 6",
                 Sender = "admin@admin.com",
                 Topic = "Test Mail 6"
@@ -70,7 +70,7 @@ namespace StudentMailOrganizer.Infrastructure
 
             MailMessage m7 = new MailMessage
             {
-                MessageId = 7,
+                Id = 7,
                 Body = "Mail 7",
                 Sender = "admin5@admin.com",
                 Topic = "Test Mail 7"
@@ -78,7 +78,7 @@ namespace StudentMailOrganizer.Infrastructure
 
             MailMessage m8 = new MailMessage
             {
-                MessageId = 8,
+                Id = 8,
                 Body = "Mail 8",
                 Sender = "admin6@admin.com",
                 Topic = "Test Mail 8"
@@ -86,7 +86,7 @@ namespace StudentMailOrganizer.Infrastructure
 
             MailMessage m9 = new MailMessage
             {
-                MessageId = 9,
+                Id = 9,
                 Body = "Mail 9",
                 Sender = "admin1@admin.com",
                 Topic = "Test Mail 9"
@@ -94,7 +94,7 @@ namespace StudentMailOrganizer.Infrastructure
 
             MailMessage m10 = new MailMessage
             {
-                MessageId = 10,
+                Id = 10,
                 Body = "Mail 10",
                 Sender = "admin5@admin.com",
                 Topic = "Test Mail 10"

@@ -19,9 +19,75 @@ namespace StudentMailOrganizer.DAL
             db = new MailContext();
         }
 
+        public IEnumerable<Category> Synchronize()
+        {
+            var emails = _mailer.GetAllMessages().ToList();
+            db.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.MailMessages");
+            foreach (var email in emails)
+            {
+                db.Emails.Add(email);
+            }
+            db.SaveChanges();
+
+            var sortedMails = SortMessages(emails);
+
+            return sortedMails;
+        }
+
         public IEnumerable<Category> GetCategories()
         {
             return db.Categories;
+        }
+
+        public bool AddCategory(Category category)
+        {
+            try
+            {
+                db.Categories.Add(category);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool EditCategory(Category category)
+        {
+            var cat = db.Categories.FirstOrDefault(x => x.CategoryId == category.CategoryId);
+            if (cat != null)
+            {
+                try
+                {
+                    cat.Name = category.Name;
+                    cat.AcceptedEmails = category.AcceptedEmails;
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool RemoveCategory(Category category)
+        {
+            try
+            {
+                db.Categories.Remove(category);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public IEnumerable<MailMessage> GetAllMessages()
@@ -29,19 +95,33 @@ namespace StudentMailOrganizer.DAL
             return db.Emails;
         }
 
-        public IEnumerable<Category> GetSortedMessages()
+        private IEnumerable<Category> SortMessages(IEnumerable<MailMessage> emails)
         {
-            var emails = GetAllMessages();
-            var categories = GetCategories();
+            var categories = GetCategories().ToList();
             foreach (var cat in categories)
             {
                 foreach (var email in emails)
                 {
-                    if (cat.AcceptedEmails.Contains(email.Sender))
+                    var filter = cat.AcceptedEmails.Select(x => x.Email);
+                    if (filter.Contains(email.Sender))
                         cat.Mails.Add(email);
                 }
             }
-
+            return categories;
+        }
+        public  IEnumerable<Category> GetSortedMessages()
+        {
+            var emails = GetAllMessages().ToList();
+            var categories = GetCategories().ToList();
+            foreach (var cat in categories)
+            {
+                foreach (var email in emails)
+                {
+                    var filter = cat.AcceptedEmails.Select(x => x.Email);
+                    if (filter.Contains(email.Sender))
+                        cat.Mails.Add(email);
+                }
+            }
             return categories;
         }
 

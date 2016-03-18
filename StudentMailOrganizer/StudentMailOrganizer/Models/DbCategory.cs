@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace StudentMailOrganizer.Models
 {
-    public class Category
+    public class DbCategory
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }
-        public List<MailMessage> Mails { get; set; }
-        public List<Sender> AcceptedEmails { get; set; }
-        public Category()
+        public virtual List<Sender> AcceptedEmails { get; set; }
+        public DbCategory()
         {
-            Mails = new List<MailMessage>();
             AcceptedEmails = new List<Sender>();
         }
     }

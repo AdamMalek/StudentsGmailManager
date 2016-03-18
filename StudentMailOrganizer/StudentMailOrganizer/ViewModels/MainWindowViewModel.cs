@@ -17,6 +17,7 @@ namespace StudentMailOrganizer.ViewModels
         List<MailMessage> _categoryItems;
         MailMessage _selectedMail;
         DateTime _selectedDate;
+        DbCategory _selectedCategory;
 
         public List<Category> Categories
         {
@@ -27,6 +28,12 @@ namespace StudentMailOrganizer.ViewModels
             set
             {
                 _categories = value;
+                _categories.Insert(0, new Category()
+                {
+                    Name = "Wszystkie",
+                    Mails = manager.GetAllMessages().ToList()
+                }
+                );
                 RaisePropertyChange("Categories");
             }
         }
@@ -66,22 +73,55 @@ namespace StudentMailOrganizer.ViewModels
                 RaisePropertyChange("SelectedDate");
             }
         }
+        public DbCategory SelectedCategory
+        {
+            get
+            {
+                return _selectedCategory;
+            }
+            set
+            {
+                _selectedCategory = value;
+                CategoryItems = value.Mails;
+                RaisePropertyChange("SelectedCategory");
+            }
+        }
 
         MailManager manager;
 
         public MainWindowViewModel()
         {
             manager = new MailManager(new FakeMailingService());
-
-            
         }
 
+        public void XD()
+        {
+            //SeedCategories();
+            Categories = manager.Synchronize().ToList();
 
+        }
 
-
-
-
-
+        private void SeedCategories()
+        {
+            manager.AddCategory(new DbCategory
+            {
+                Name = "Programowanie",
+                AcceptedEmails = new List<Sender>
+                {
+                    new Sender { Email= "admin@admin.com" },
+                    new Sender { Email= "admin3@admin.com" }
+                }
+            });
+            manager.AddCategory(new DbCategory
+            {
+                Name = "Systemy Operacyjne",
+                AcceptedEmails = new List<Sender>
+                {
+                    new Sender { Email= "admin2@admin.com" },
+                    new Sender { Email= "admin3@admin.com" }
+                }
+            });
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

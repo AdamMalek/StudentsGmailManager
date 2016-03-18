@@ -7,13 +7,30 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="494.59" Width="848.607" ResizeMode="NoResize">
     <Grid>
-        <ListBox x:Name="CategoryList" HorizontalAlignment="Left" Height="422" Margin="10,32,0,0" ItemsSource="{Binding Categories}" VerticalAlignment="Top" Width="225" SnapsToDevicePixels="True"/>
-        <ListBox x:Name="CategoryEmails" HorizontalAlignment="Left" Height="168" Margin="240,32,0,0" ItemsSource="{Binding CategoryItems}" VerticalAlignment="Top" Width="407"/>
+        <ListBox x:Name="CategoryList" HorizontalAlignment="Left" Height="422" Margin="10,32,0,0" SelectedItem="{Binding SelectedCategory}" ItemsSource="{Binding Categories}" VerticalAlignment="Top" Width="225" SnapsToDevicePixels="True">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"></TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <ListBox x:Name="CategoryEmails" HorizontalAlignment="Left" Height="168" Margin="240,32,0,0" ItemsSource="{Binding CategoryItems}" SelectedItem="{Binding SelectedMail}" VerticalAlignment="Top" Width="407">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Sender}"></TextBlock>
+                        <TextBlock Text="-"></TextBlock>
+                        <TextBlock Text="{Binding Topic}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <Calendar HorizontalAlignment="Left" Margin="652,32,0,0" VerticalAlignment="Top" SelectedDate="{Binding SelectedDate}" Height="168"/>
-        <TextBox x:Name="EmailSender" HorizontalAlignment="Left" Height="21" Margin="306,202,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Sender}" VerticalAlignment="Top" Width="525" IsEnabled="False"/>
-        <TextBox x:Name="EmailTopic" HorizontalAlignment="Left" Height="21" Margin="306,228,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Topic}" VerticalAlignment="Top" Width="525" IsEnabled="False"/>
-        <TextBox x:Name="EmailMessage" HorizontalAlignment="Left" Height="200" Margin="240,254,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Body}" VerticalAlignment="Top" Width="591" IsEnabled="False"/>
+        <TextBox x:Name="EmailSender" HorizontalAlignment="Left" Height="21" Margin="306,202,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Sender}" VerticalAlignment="Top" Width="525" IsReadOnly="True"/>
+        <TextBox x:Name="EmailTopic" HorizontalAlignment="Left" Height="21" Margin="306,228,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Topic}" VerticalAlignment="Top" Width="525" IsReadOnly="True" />
+        <TextBox x:Name="EmailMessage" HorizontalAlignment="Left" Height="200" Margin="240,254,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Body}" VerticalAlignment="Top" Width="591" IsReadOnly="True"/>
         <Label x:Name="label" Content="Nadawca:" HorizontalAlignment="Left" Margin="237,202,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label_Copy" Content="Temat:" HorizontalAlignment="Left" Margin="252,223,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="22,7,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
     </Grid>
 </Window>
