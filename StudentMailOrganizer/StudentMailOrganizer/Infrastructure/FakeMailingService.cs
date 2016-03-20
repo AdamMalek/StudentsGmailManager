@@ -141,7 +141,7 @@ namespace StudentMailOrganizer.Infrastructure
 
         public bool SendMessage(MailMessage email)
         {
-            return (new Random().NextDouble() > 0.1);
+            return (new Random().NextDouble() > 0.5);
         }
     }
 }

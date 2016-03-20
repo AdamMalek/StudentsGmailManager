@@ -134,8 +134,16 @@
     <Compile Include="Infrastructure\FakeMailingService.cs" />
     <Compile Include="Infrastructure\IMailService.cs" />
     <Compile Include="Infrastructure\RelayCommand.cs" />
+    <Compile Include="ManageCategories.xaml.cs">
+      <DependentUpon>ManageCategories.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\Sender.cs" />
+    <Compile Include="SendEmailView.xaml.cs">
+      <DependentUpon>SendEmailView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\ManageCategoriesViewModel.cs" />
+    <Compile Include="ViewModels\SendEmailViewModel.cs" />
     <Compile Include="ViewModels\SynchMailViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -149,6 +157,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ManageCategories.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SendEmailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Category.cs" />

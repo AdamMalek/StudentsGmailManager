@@ -62,6 +62,7 @@ namespace StudentMailOrganizer.ViewModels
             {
                 _selectedMail = value;
                 RaisePropertyChange("SelectedMail");
+                RaisePropertyChange("IsMailSelected");
             }
         }
         public DateTime SelectedDate
@@ -90,6 +91,7 @@ namespace StudentMailOrganizer.ViewModels
                 RaisePropertyChange("SelectedCategory");
             }
         }
+        public bool IsMailSelected { get { return SelectedMail != null; } }
 
         MailManager manager;
 
@@ -102,7 +104,10 @@ namespace StudentMailOrganizer.ViewModels
                 lastReceivedMailData = manager.Synchronize();
                 Categories = lastReceivedMailData.Categories;
             });
+            SendMail = new RelayCommand(SendMessage);
         }
+
+
         private void GetDataFromDatabase()
         {
             lastReceivedMailData = manager.GetDataFromDatabase();
@@ -155,6 +160,62 @@ namespace StudentMailOrganizer.ViewModels
         public ICommand Synchronize { get; set; }
         public ICommand SendMail { get; set; }
 
+        private void SendMessage(object obj)
+        {
+            SendEmailViewModel vm;
+
+            var mode = (string)obj;
+            if (mode == "new")
+            {
+                vm = new SendEmailViewModel();
+            }
+            else
+            {
+                if (!IsMailSelected) return;
+                vm = new SendEmailViewModel();
+                vm.Receiver = SelectedMail.Sender;
+                vm.Topic = "Re: " + SelectedMail.Topic;
+            }
+
+            SendEmailView view = new SendEmailView(vm);
+            var res = view.ShowDialog();
+            if (res.HasValue && res.Value == true)
+            {
+                MailMessage mail = new MailMessage();
+                mail.Sender = vm.Receiver;
+                mail.Topic = vm.Topic;
+                mail.Body = vm.Body;
+                mail.MailDate = DateTime.Now;
+
+                var success = manager.SendMail(mail);
+
+                if (success)
+                {
+                    ShowMessage("Wiadomość wysłano poprawnie");
+                }
+                else
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        var retryStatus = manager.SendMail(mail);
+                        if (retryStatus == true)
+                        {
+                            ShowMessage("Wiadomość wysłano poprawnie");
+                            return;
+                        }
+                    }
+                    ShowMessage("Błąd podczas wysyłania wiadomości");
+                }
+            }
+        }
+        //-------- DELEGATES
+        public delegate void Message(string msg);
+        public event Message ModelMessage;
+        void ShowMessage(string msg)
+        {
+            var x = ModelMessage;
+            if (x != null) x(msg);
+       } 
         //-------- NOTIFY PROPERTY CHANGE -------
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -1,0 +1,14 @@
+﻿<Window x:Class="StudentMailOrganizer.ManageCategories"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentMailOrganizer"
+        mc:Ignorable="d"
+        Title="Manage categories" Height="459.057" Width="483.686" ResizeMode="NoResize">
+    <Grid>
+        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="319" Margin="10,10,0,0" VerticalAlignment="Top" Width="230"/>
+        <ListBox x:Name="listBox_Copy" HorizontalAlignment="Left" Height="319" Margin="245,10,0,0" VerticalAlignment="Top" Width="223"/>
+
+    </Grid>
+</Window>
