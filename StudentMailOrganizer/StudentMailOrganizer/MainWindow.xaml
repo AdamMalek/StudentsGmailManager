@@ -32,5 +32,6 @@
         <Label x:Name="label" Content="Nadawca:" HorizontalAlignment="Left" Margin="237,202,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label_Copy" Content="Temat:" HorizontalAlignment="Left" Margin="252,223,0,0" VerticalAlignment="Top"/>
         <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="22,7,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+        <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Margin="127,7,0,0" VerticalAlignment="Top" Width="75" Click="button1_Click"/>
     </Grid>
 </Window>

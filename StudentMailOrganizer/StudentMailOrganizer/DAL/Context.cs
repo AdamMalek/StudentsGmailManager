@@ -11,7 +11,7 @@ namespace StudentMailOrganizer.DAL
     public class MailContext : DbContext
     {
         public DbSet<MailMessage> Emails { get; set; }
-        public DbSet<DbCategory> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public MailContext()
         {

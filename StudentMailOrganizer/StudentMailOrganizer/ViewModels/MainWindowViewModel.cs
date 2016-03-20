@@ -17,7 +17,9 @@ namespace StudentMailOrganizer.ViewModels
         List<MailMessage> _categoryItems;
         MailMessage _selectedMail;
         DateTime _selectedDate;
-        DbCategory _selectedCategory;
+        Category _selectedCategory;
+
+        SynchMailViewModel lastReceivedMailData;
 
         public List<Category> Categories
         {
@@ -30,8 +32,9 @@ namespace StudentMailOrganizer.ViewModels
                 _categories = value;
                 _categories.Insert(0, new Category()
                 {
+                    CategoryId = -1,
                     Name = "Wszystkie",
-                    Mails = manager.GetAllMessages().ToList()
+                    Mails = lastReceivedMailData.Emails
                 }
                 );
                 RaisePropertyChange("Categories");
@@ -73,7 +76,7 @@ namespace StudentMailOrganizer.ViewModels
                 RaisePropertyChange("SelectedDate");
             }
         }
-        public DbCategory SelectedCategory
+        public Category SelectedCategory
         {
             get
             {
@@ -82,7 +85,8 @@ namespace StudentMailOrganizer.ViewModels
             set
             {
                 _selectedCategory = value;
-                CategoryItems = value.Mails;
+                CategoryItems = value.Mails.ToList();
+                SelectedMail = value.Mails.FirstOrDefault();
                 RaisePropertyChange("SelectedCategory");
             }
         }
@@ -92,18 +96,36 @@ namespace StudentMailOrganizer.ViewModels
         public MainWindowViewModel()
         {
             manager = new MailManager(new FakeMailingService());
+            GetDataFromDatabase();
         }
 
         public void XD()
         {
-            //SeedCategories();
-            Categories = manager.Synchronize().ToList();
+            SeedCategories();
+            Synchronize();
+        }
+         public void RemoveCategory()
+        {
+            manager.RemoveCategory(Categories.Last());
+            GetDataFromDatabase();
+        }
+        
 
+        private void Synchronize()
+        {
+            lastReceivedMailData = manager.Synchronize();
+            Categories = lastReceivedMailData.Categories;
+        }
+
+        private void GetDataFromDatabase()
+        {
+            lastReceivedMailData = manager.GetDataFromDatabase();
+            Categories = lastReceivedMailData.Categories;
         }
 
         private void SeedCategories()
         {
-            manager.AddCategory(new DbCategory
+            manager.AddCategory(new Category
             {
                 Name = "Programowanie",
                 AcceptedEmails = new List<Sender>
@@ -112,7 +134,7 @@ namespace StudentMailOrganizer.ViewModels
                     new Sender { Email= "admin3@admin.com" }
                 }
             });
-            manager.AddCategory(new DbCategory
+            manager.AddCategory(new Category
             {
                 Name = "Systemy Operacyjne",
                 AcceptedEmails = new List<Sender>

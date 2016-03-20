@@ -100,16 +100,25 @@ namespace StudentMailOrganizer.Infrastructure
                 Topic = "Test Mail 10"
             };
 
+            MailMessage m11 = new MailMessage
+            {
+                Id = 11,
+                Body = "XD",
+                Sender = "admin2@admin.com",
+                Topic = "Test Mail 11"
+            };
+
             _messages.Add(m1);
             _messages.Add(m2);
             _messages.Add(m3);
             _messages.Add(m4);
             _messages.Add(m5);
-            _messages.Add(m6);
+            //_messages.Add(m6);
             _messages.Add(m7);
             _messages.Add(m8);
-            _messages.Add(m9);
+            //_messages.Add(m9);
             _messages.Add(m10);
+            _messages.Add(m11);
 
         }
 

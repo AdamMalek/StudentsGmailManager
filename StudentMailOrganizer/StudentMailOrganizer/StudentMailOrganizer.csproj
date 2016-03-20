@@ -137,9 +137,9 @@
     <Compile Include="DAL\DatabaseManager.cs" />
     <Compile Include="Infrastructure\FakeMailingService.cs" />
     <Compile Include="Infrastructure\IMailService.cs" />
-    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Sender.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\SynchMailViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -154,7 +154,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\DbCategory.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\MailMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
