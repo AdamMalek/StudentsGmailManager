@@ -18,14 +18,16 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 0,
                 Body = "Mail 0",
                 Sender = "admin1@admin.com",
-                Topic = "Test Mail 0"
+                Topic = "Test Mail 0",
+                MailDate = new DateTime(2014,10,10)
             };
             MailMessage m1 = new MailMessage
             {
                 Id = 1,
                 Body = "Mail 1",
                 Sender = "admin2@admin.com",
-                Topic = "Test Mail 1"
+                Topic = "Test Mail 1",
+                MailDate = new DateTime(2015, 12, 31)
             };
 
             MailMessage m2 = new MailMessage
@@ -33,7 +35,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 2,
                 Body = "Mail 2",
                 Sender = "admin3@admin.com",
-                Topic = "Test Mail 2"
+                Topic = "Test Mail 2",
+                MailDate = new DateTime(2015, 03, 11)
             };
 
             MailMessage m3 = new MailMessage
@@ -41,7 +44,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 3,
                 Body = "Mail 3",
                 Sender = "admin@admin.com",
-                Topic = "Test Mail 3"
+                Topic = "Test Mail 3",
+                MailDate = new DateTime(2016, 02, 21)
             };
 
             MailMessage m4 = new MailMessage
@@ -49,7 +53,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 4,
                 Body = "Mail 4",
                 Sender = "admin1@admin.com",
-                Topic = "Test Mail 4"
+                Topic = "Test Mail 4",
+                MailDate = new DateTime(2016, 01, 18)
             };
 
             MailMessage m5 = new MailMessage
@@ -57,7 +62,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 5,
                 Body = "Mail 5",
                 Sender = "admin2@admin.com",
-                Topic = "Test Mail 5"
+                Topic = "Test Mail 5",
+                MailDate = new DateTime(2016, 02, 01)
             };
 
             MailMessage m6 = new MailMessage
@@ -65,7 +71,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 6,
                 Body = "Mail 6",
                 Sender = "admin@admin.com",
-                Topic = "Test Mail 6"
+                Topic = "Test Mail 6",
+                MailDate = new DateTime(2016, 02, 14)
             };
 
             MailMessage m7 = new MailMessage
@@ -73,7 +80,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 7,
                 Body = "Mail 7",
                 Sender = "admin5@admin.com",
-                Topic = "Test Mail 7"
+                Topic = "Test Mail 7",
+                MailDate = new DateTime(2016, 01, 1)
             };
 
             MailMessage m8 = new MailMessage
@@ -81,7 +89,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 8,
                 Body = "Mail 8",
                 Sender = "admin6@admin.com",
-                Topic = "Test Mail 8"
+                Topic = "Test Mail 8",
+                MailDate = new DateTime(2016, 01, 3)
             };
 
             MailMessage m9 = new MailMessage
@@ -89,7 +98,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 9,
                 Body = "Mail 9",
                 Sender = "admin1@admin.com",
-                Topic = "Test Mail 9"
+                Topic = "Test Mail 9",
+                MailDate = new DateTime(2016, 01, 17)
             };
 
             MailMessage m10 = new MailMessage
@@ -97,7 +107,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 10,
                 Body = "Mail 10",
                 Sender = "admin5@admin.com",
-                Topic = "Test Mail 10"
+                Topic = "Test Mail 10",
+                MailDate = new DateTime(2016, 01, 20)
             };
 
             MailMessage m11 = new MailMessage
@@ -105,7 +116,8 @@ namespace StudentMailOrganizer.Infrastructure
                 Id = 11,
                 Body = "XD",
                 Sender = "admin2@admin.com",
-                Topic = "Test Mail 11"
+                Topic = "Test Mail 11",
+                MailDate = new DateTime(2016, 03, 15)
             };
 
             _messages.Add(m1);

@@ -1,5 +1,4 @@
-﻿using Ninject;
-using StudentMailOrganizer.Infrastructure;
+﻿using StudentMailOrganizer.Infrastructure;
 using StudentMailOrganizer.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -26,17 +25,8 @@ namespace StudentMailOrganizer
         public MainWindow()
         {
             InitializeComponent();
-            //var kernel = new StandardKernel();
-            //kernel.Bind<IMailService>().To<FakeMailingService>();
-            //var vm = kernel.Get<MainWindowViewModel>();
             var vm = new MainWindowViewModel();
             this.DataContext = vm;
-        }
-
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            var vm = (MainWindowViewModel)DataContext;
-            vm.XD();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)

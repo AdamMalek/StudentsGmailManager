@@ -88,6 +88,8 @@ namespace StudentMailOrganizer.DAL
 
         public bool EditCategory(Category category, string name, List<string> filter)
         {
+            if (category.CategoryId == -1) return true;
+
             category.Name = name;
 
             var currentFilter = category.AcceptedEmails.Select(x => x.Email);
