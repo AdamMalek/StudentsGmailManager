@@ -1,5 +1,4 @@
-﻿using Ninject;
-using StudentMailOrganizer.DAL;
+﻿using StudentMailOrganizer.DAL;
 using StudentMailOrganizer.Infrastructure;
 using StudentMailOrganizer.Models;
 using System;
@@ -8,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace StudentMailOrganizer.ViewModels
 {
@@ -97,14 +97,26 @@ namespace StudentMailOrganizer.ViewModels
         {
             manager = new MailManager(new FakeMailingService());
             GetDataFromDatabase();
+            Synchronize = new RelayCommand((obj) =>
+            {
+                lastReceivedMailData = manager.Synchronize();
+                Categories = lastReceivedMailData.Categories;
+            });
+        }
+        private void GetDataFromDatabase()
+        {
+            lastReceivedMailData = manager.GetDataFromDatabase();
+            Categories = lastReceivedMailData.Categories;
         }
 
+
+        //--------- TEST ----
         public void XD()
         {
             SeedCategories();
-            Synchronize();
+            //Synchronize();
         }
-         public void RemoveCategory()
+        public void RemoveCategory()
         {
             var cat = Categories.Last();
             var name = "XDD";
@@ -114,23 +126,9 @@ namespace StudentMailOrganizer.ViewModels
                 "admin5@admin.com",
                 "admin3@admin.com"
             };
-            manager.EditCategory(cat,name,newFilters);
+            manager.EditCategory(cat, name, newFilters);
             GetDataFromDatabase();
         }
-        
-
-        private void Synchronize()
-        {
-            lastReceivedMailData = manager.Synchronize();
-            Categories = lastReceivedMailData.Categories;
-        }
-
-        private void GetDataFromDatabase()
-        {
-            lastReceivedMailData = manager.GetDataFromDatabase();
-            Categories = lastReceivedMailData.Categories;
-        }
-
         private void SeedCategories()
         {
             manager.AddCategory(new Category
@@ -153,6 +151,11 @@ namespace StudentMailOrganizer.ViewModels
             });
         }
 
+        //--------- COMMANDS ---------------
+        public ICommand Synchronize { get; set; }
+        public ICommand SendMail { get; set; }
+
+        //-------- NOTIFY PROPERTY CHANGE -------
         public event PropertyChangedEventHandler PropertyChanged;
 
         void RaisePropertyChange(string propName)
