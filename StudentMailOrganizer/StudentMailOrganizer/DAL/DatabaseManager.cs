@@ -14,6 +14,11 @@ namespace StudentMailOrganizer.DAL
         private MailContext db;
         private IMailService _mailer;
 
+        public bool SendMail(MailMessage mail)
+        {
+            return _mailer.SendMessage(mail);
+        }
+
         public MailManager(IMailService mailer)
         {
             _mailer = mailer;
@@ -81,43 +86,50 @@ namespace StudentMailOrganizer.DAL
             //}
         }
 
-        public bool EditCategory(Category category)
+        public bool EditCategory(Category category, string name, List<string> filter)
         {
-            var cat = db.Categories.FirstOrDefault(x => x.CategoryId == category.CategoryId);
-            if (cat != null)
+            category.Name = name;
+
+            var currentFilter = category.AcceptedEmails.Select(x => x.Email);
+            var difference = currentFilter.Except(filter).ToList();
+
+            foreach (var email in difference)
             {
-                //try
-                //{
-                cat.Name = category.Name;
-                cat.AcceptedEmails = category.AcceptedEmails;
-                db.SaveChanges();
-                return true;
-                //}
-                //catch (Exception)
-                //{
-                //    return false;
-                //}
+                var f = category.AcceptedEmails.First(x => x.Email == email);
+                category.AcceptedEmails.Remove(f);
+
+                var toDelete = category.Mails.Where(x => x.Sender == email);
+                while (toDelete.Count() > 0)
+                {
+                    var item = toDelete.First();
+                    category.Mails.Remove(item);
+                }
+
             }
-            else
+
+            difference = filter.Except(currentFilter).ToList();
+            foreach (var newFilter in difference)
             {
-                return false;
+                category.AcceptedEmails.Add(new Sender { Email = newFilter });
+
+                foreach (var item in db.Emails.Where(x => x.Sender == newFilter))
+                {
+                    category.Mails.Add(item);
+                }
             }
+            db.SaveChanges();
+
+            return true;
         }
+
 
         public bool RemoveCategory(Category category)
         {
-            //try
-            //{
             if (category.CategoryId == -1) return true;
             category.Mails.Clear();
             db.Categories.Remove(category);
             db.SaveChanges();
             return true;
-            //}
-            //catch (Exception)
-            //{
-            //    return false;
-            //}
         }
 
 

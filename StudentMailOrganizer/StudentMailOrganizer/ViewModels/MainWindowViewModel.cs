@@ -106,7 +106,15 @@ namespace StudentMailOrganizer.ViewModels
         }
          public void RemoveCategory()
         {
-            manager.RemoveCategory(Categories.Last());
+            var cat = Categories.Last();
+            var name = "XDD";
+            var newFilters = new List<string>
+            {
+                "admin@admin.com",
+                "admin5@admin.com",
+                "admin3@admin.com"
+            };
+            manager.EditCategory(cat,name,newFilters);
             GetDataFromDatabase();
         }
         
