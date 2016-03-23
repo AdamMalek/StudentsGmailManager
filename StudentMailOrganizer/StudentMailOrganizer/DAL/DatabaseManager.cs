@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace StudentMailOrganizer.DAL
 {
@@ -14,11 +15,8 @@ namespace StudentMailOrganizer.DAL
     {
         private MailContext db;
         private IMailService _mailer;
+        private string _currentUser = "no-logon";
 
-        public bool Login(string login, SecureString password)
-        {
-            return _mailer.Login(login, password);
-        }
 
         public bool SendMail(MailMessage mail)
         {
@@ -31,16 +29,13 @@ namespace StudentMailOrganizer.DAL
             db = new MailContext();
         }
 
-        internal bool IsLoggedIn()
-        {
-            return _mailer.IsLoggedIn();
-        }
 
         public SynchMailViewModel Synchronize()
         {
             var emails = _mailer.GetAllMessages().ToList();
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.MailMessageCategories;");
-            db.Database.ExecuteSqlCommand("DELETE FROM dbo.MailMessages;");
+
+            db.Emails.RemoveRange(db.Emails.Where(x=> x.Receiver == _currentUser));
+
             foreach (var email in emails)
             {
                 db.Emails.Add(email);
@@ -67,11 +62,11 @@ namespace StudentMailOrganizer.DAL
 
         public IEnumerable<Category> GetCategories()
         {
-            return db.Categories;
+            return db.Categories;//.Include(x=> x.Mails.Where(y=> y.Receiver == _currentUser));
         }
         public IEnumerable<MailMessage> GetMessages()
         {
-            return db.Emails;
+            return db.Emails.Where(x=> x.Receiver == _currentUser);
         }
 
         public bool AddCategory(Category category)
@@ -135,7 +130,6 @@ namespace StudentMailOrganizer.DAL
             return true;
         }
 
-
         public bool RemoveCategory(Category category)
         {
             if (category.CategoryId == -1) return true;
@@ -188,6 +182,31 @@ namespace StudentMailOrganizer.DAL
             return true;
         }
 
+
+        public bool Logout()
+        {
+            bool loggedOut =_mailer.Logout();
+            if (loggedOut)
+            {
+                _currentUser = "no-logon";
+                return true;
+            }
+            return false;
+        }
+        public bool Login(string login, SecureString password)
+        {
+            var logged = _mailer.Login(login, password);
+            if (logged)
+            {
+                _currentUser = login;
+                return true;
+            }
+            return false;
+        }
+        internal bool IsLoggedIn()
+        {
+            return _mailer.IsLoggedIn();
+        }
         internal string GetLogin()
         {
             return _mailer.GetCurrentLogin();

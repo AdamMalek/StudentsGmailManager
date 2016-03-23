@@ -14,5 +14,7 @@ namespace StudentMailOrganizer.Infrastructure
         bool SendMessage(MailMessage email);
         bool Login(string login, SecureString password);
         bool IsLoggedIn();
+        string GetCurrentLogin();
+        bool Logout();
     }
 }

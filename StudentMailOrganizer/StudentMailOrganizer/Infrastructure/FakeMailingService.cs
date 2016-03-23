@@ -5,6 +5,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using StudentMailOrganizer.Models;
+using System.Runtime.InteropServices;
 
 namespace StudentMailOrganizer.Infrastructure
 {
@@ -167,18 +168,49 @@ namespace StudentMailOrganizer.Infrastructure
 
         public IEnumerable<MailMessage> GetAllMessages()
         {
-            return _messages.Where(x=> x.Receiver == _currentUser);
+            return _messages.Where(x => x.Receiver == _currentUser);
         }
 
         public bool Login(string login, SecureString password)
         {
-            if (accounts[login] == null) return false;
-            if  (accounts[login] == password)
+            if (accounts.Keys.Contains(login))
             {
-                _currentUser = login;
-                return true;
+                if (IsEqualTo(accounts[login], password))
+                {
+                    _currentUser = login;
+                    return true;
+                }
             }
             return false;
+        }
+
+        public static bool IsEqualTo(SecureString ss1, SecureString ss2)
+        {
+            IntPtr bstr1 = IntPtr.Zero;
+            IntPtr bstr2 = IntPtr.Zero;
+            try
+            {
+                bstr1 = Marshal.SecureStringToBSTR(ss1);
+                bstr2 = Marshal.SecureStringToBSTR(ss2);
+                int length1 = Marshal.ReadInt32(bstr1, -4);
+                int length2 = Marshal.ReadInt32(bstr2, -4);
+                if (length1 == length2)
+                {
+                    for (int x = 0; x < length1; ++x)
+                    {
+                        byte b1 = Marshal.ReadByte(bstr1, x);
+                        byte b2 = Marshal.ReadByte(bstr2, x);
+                        if (b1 != b2) return false;
+                    }
+                }
+                else return false;
+                return true;
+            }
+            finally
+            {
+                if (bstr2 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr2);
+                if (bstr1 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr1);
+            }
         }
 
         public bool SendMessage(MailMessage email)
@@ -195,6 +227,19 @@ namespace StudentMailOrganizer.Infrastructure
         {
             if (!IsLoggedIn()) return string.Empty;
             return _currentUser;
+        }
+
+        public bool Logout()
+        {
+            if (new Random().NextDouble() > 0.1)
+            {
+                _currentUser = "no-logon";
+                return true;
+            }
+            else
+            {                
+                return false;
+            }
         }
     }
 }

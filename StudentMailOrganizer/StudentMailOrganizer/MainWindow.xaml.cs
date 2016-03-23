@@ -29,5 +29,11 @@ namespace StudentMailOrganizer
             vm.ModelMessage += (msg) => MessageBox.Show(msg);
             this.DataContext = vm;            
         }
+
+        private void button2_Click(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowViewModel)DataContext).Login(passwordBox.SecurePassword);
+            passwordBox.Password = "";
+        }
     }
 }

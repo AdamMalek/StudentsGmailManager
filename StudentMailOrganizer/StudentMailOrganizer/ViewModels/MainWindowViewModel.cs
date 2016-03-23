@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -20,12 +21,18 @@ namespace StudentMailOrganizer.ViewModels
         Category _selectedCategory;
 
         SynchMailViewModel lastReceivedMailData;
+        string _email;
+        public string Email { get { return _email; } set { _email = value; RaisePropertyChange("Email"); } }
         public bool IsLoggedIn
         {
             get
             {
                 return manager.IsLoggedIn();
             }
+        }
+        public bool IsNotLoggedIn
+        {
+            get { return !IsLoggedIn; }
         }
         public List<Category> Categories
         {
@@ -36,13 +43,16 @@ namespace StudentMailOrganizer.ViewModels
             set
             {
                 _categories = value;
-                _categories.Insert(0, new Category()
+                if (IsLoggedIn)
                 {
-                    CategoryId = -1,
-                    Name = "Wszystkie",
-                    Mails = lastReceivedMailData.Emails
-                }
+                    _categories.Insert(0, new Category()
+                    {
+                        CategoryId = -1,
+                        Name = "Wszystkie",
+                        Mails = lastReceivedMailData.Emails
+                    }
                 );
+                }
                 RaisePropertyChange("Categories");
             }
         }
@@ -92,8 +102,16 @@ namespace StudentMailOrganizer.ViewModels
             set
             {
                 _selectedCategory = value;
-                CategoryItems = value.Mails.ToList();
-                SelectedMail = value.Mails.FirstOrDefault();
+                if (value != null)
+                {
+                    CategoryItems = value.Mails.ToList();
+                    SelectedMail = value.Mails.FirstOrDefault();
+                }
+                else
+                {
+                    CategoryItems = null;
+                    SelectedMail = null;
+                }
                 RaisePropertyChange("SelectedCategory");
             }
         }
@@ -104,7 +122,6 @@ namespace StudentMailOrganizer.ViewModels
         public MainWindowViewModel()
         {
             manager = new MailManager(new FakeMailingService());
-            GetDataFromDatabase();
             Synchronize = new RelayCommand((obj) =>
             {
                 lastReceivedMailData = manager.Synchronize();
@@ -112,6 +129,7 @@ namespace StudentMailOrganizer.ViewModels
             });
             SendMail = new RelayCommand(SendMessage);
             ManageCategory = new RelayCommand(ManageCategoriesFunc);
+            Logout = new RelayCommand(LogoutFunc);
         }
 
 
@@ -121,6 +139,39 @@ namespace StudentMailOrganizer.ViewModels
             Categories = lastReceivedMailData.Categories;
         }
 
+        public void Login(SecureString password)
+        {
+            var loggedIn = manager.Login(Email, password);
+
+            if (loggedIn)
+            {
+                GetDataFromDatabase();
+                RaisePropertyChange("IsLoggedIn");
+                RaisePropertyChange("IsNotLoggedIn");
+            }
+            else
+            {
+                ShowMessage("Nie udało się zalogować!");
+            }
+        }
+
+        private void LogoutFunc(object obj)
+        {
+            var loggedOut = manager.Logout();
+
+            if (loggedOut)
+            {
+                Categories = new List<Category>();
+                SelectedCategory = null;
+                Email = "";
+                RaisePropertyChange("IsLoggedIn");
+                RaisePropertyChange("IsNotLoggedIn");
+            }
+            else
+            {
+                ShowMessage("Nie udało się wylogować!");
+            }
+        }
 
         //--------- TEST ----
         public void XD()
@@ -167,6 +218,7 @@ namespace StudentMailOrganizer.ViewModels
         public ICommand Synchronize { get; set; }
         public ICommand SendMail { get; set; }
         public ICommand ManageCategory { get; set; }
+        public ICommand Logout { get; set; }
 
         private void SendMessage(object obj)
         {
@@ -220,8 +272,8 @@ namespace StudentMailOrganizer.ViewModels
 
         private void ManageCategoriesFunc(object obj)
         {
-            List<Category> vmCategories = Categories.Except(Categories.Where(x=> x.CategoryId==-1)).Select(
-                x=>
+            List<Category> vmCategories = Categories.Except(Categories.Where(x => x.CategoryId == -1)).Select(
+                x =>
                 {
                     var newCategory = new Category();
                     newCategory.CategoryId = x.CategoryId;
@@ -250,7 +302,7 @@ namespace StudentMailOrganizer.ViewModels
                 {
                     ShowMessage("Błąd podczas edycji kategorii");
                 }
-            }            
+            }
         }
         //-------- DELEGATES
         public delegate void Message(string msg);
@@ -259,7 +311,7 @@ namespace StudentMailOrganizer.ViewModels
         {
             var x = ModelMessage;
             if (x != null) x(msg);
-       } 
+        }
         //-------- NOTIFY PROPERTY CHANGE -------
         public event PropertyChangedEventHandler PropertyChanged;
 
