@@ -149,5 +149,28 @@ namespace StudentMailOrganizer.DAL
             }
             return categories;
         }
+
+        internal bool UpdateCategories(List<Category> categories)
+        {
+            var dbCategories = GetCategories();
+
+            var categoriesToDelete = dbCategories.Select(x => x.CategoryId).Except(categories.Select(y => y.CategoryId));
+            //foreach (var item in categoriesToDelete)
+            //{
+            //    RemoveCategory(dbCategories.First(x => x.CategoryId == item));
+            //}
+
+            var categoriesToEdit = dbCategories.Select(x => x.CategoryId).Intersect(categories.Select(y => y.CategoryId));
+
+            var categoriesToAdd = categories.Select(x => x.CategoryId).Except(dbCategories.Select(y => y.CategoryId));
+            //foreach (var item in categoriesToAdd)
+            //{
+            //    AddCategory(categories.First(x => x.CategoryId == item));
+            //}
+
+
+
+            return true;
+        }
     }
 }

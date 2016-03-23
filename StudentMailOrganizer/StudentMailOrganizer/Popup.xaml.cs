@@ -16,27 +16,27 @@ using System.Windows.Shapes;
 namespace StudentMailOrganizer
 {
     /// <summary>
-    /// Interaction logic for ManageCategories.xaml
+    /// Interaction logic for Popup.xaml
     /// </summary>
-    public partial class ManageCategories : Window
+    public partial class Popup : Window
     {
-        public ManageCategories(ManageCategoriesViewModel vm)
+        public Popup(PopupVM vm)
         {
             InitializeComponent();
             DataContext = vm;
         }
 
-        private void button2_Click(object sender, RoutedEventArgs e)
+        private void button_Copy_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
-        }
-
-        private void button2_Copy_Click(object sender, RoutedEventArgs e)
-        {
-            if (((ManageCategoriesViewModel)DataContext).IsValid)
+            if (((PopupVM)DataContext).isValid())
             {
                 DialogResult = true;
             }
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
         }
     }
 }

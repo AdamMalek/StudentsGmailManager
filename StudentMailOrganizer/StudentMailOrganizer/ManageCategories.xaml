@@ -5,10 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentMailOrganizer"
         mc:Ignorable="d"
-        Title="Manage categories" Height="459.057" Width="483.686" ResizeMode="NoResize">
+        Title="Manage categories" Height="459.057" Width="493.686" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
-        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="319" Margin="10,10,0,0" VerticalAlignment="Top" Width="230"/>
-        <ListBox x:Name="listBox_Copy" HorizontalAlignment="Left" Height="319" Margin="245,10,0,0" VerticalAlignment="Top" Width="223"/>
+        <ListBox x:Name="listBox" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" HorizontalAlignment="Left" Height="278" Margin="13,58,0,0" VerticalAlignment="Top" Width="230">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"></TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label x:Name="label" Content="Foldery:" HorizontalAlignment="Left" Margin="13,2,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy" Content="Adresy E-mail:" HorizontalAlignment="Left" Margin="250,2,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="button" Content="Dodaj nowy folder" HorizontalAlignment="Left" Margin="13,33,0,0" VerticalAlignment="Top" Width="230"/>
+        <Button x:Name="button_Copy" Content="Edytuj folder" HorizontalAlignment="Left" Margin="13,341,0,0" VerticalAlignment="Top" Width="111"/>
+        <Button x:Name="button_Copy1" Content="Usuń folder" HorizontalAlignment="Left" Margin="132,341,0,0" VerticalAlignment="Top" Width="111"/>
+        <Button x:Name="button1" Content="Usuń adres" Command="{Binding RemoveFilter}" HorizontalAlignment="Left" Margin="378,341,0,0" VerticalAlignment="Top" Width="91"/>
+        <Button x:Name="button2" Content="Anuluj" HorizontalAlignment="Left" Margin="13,398,0,0" VerticalAlignment="Top" Width="111" Click="button2_Click"/>
+        <Button x:Name="button2_Copy" Content="OK" HorizontalAlignment="Left" Margin="349,398,0,0" VerticalAlignment="Top" Width="120" Click="button2_Copy_Click"/>
+        <Button x:Name="button1_Copy2" Content="Dodaj adres e-mail" Command="{Binding AddFilter}" HorizontalAlignment="Left" Margin="250,341,0,0" VerticalAlignment="Top" Width="123"/>
+        <ListBox x:Name="listBox1" ItemsSource="{Binding CategoryFilter}" SelectedItem="{Binding SelectedFilter}" HorizontalAlignment="Left" Height="303" Margin="248,33,0,0" VerticalAlignment="Top" Width="221">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Email}"></TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
     </Grid>
 </Window>

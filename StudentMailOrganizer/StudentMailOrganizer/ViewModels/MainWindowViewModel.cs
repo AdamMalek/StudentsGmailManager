@@ -105,6 +105,7 @@ namespace StudentMailOrganizer.ViewModels
                 Categories = lastReceivedMailData.Categories;
             });
             SendMail = new RelayCommand(SendMessage);
+            ManageCategory = new RelayCommand(ManageCategoriesFunc);
         }
 
 
@@ -159,6 +160,7 @@ namespace StudentMailOrganizer.ViewModels
         //--------- COMMANDS ---------------
         public ICommand Synchronize { get; set; }
         public ICommand SendMail { get; set; }
+        public ICommand ManageCategory { get; set; }
 
         private void SendMessage(object obj)
         {
@@ -207,6 +209,41 @@ namespace StudentMailOrganizer.ViewModels
                     ShowMessage("Błąd podczas wysyłania wiadomości");
                 }
             }
+        }
+
+        private void ManageCategoriesFunc(object obj)
+        {
+            List<Category> vmCategories = Categories.Except(Categories.Where(x=> x.CategoryId==-1)).Select(
+                x=>
+                {
+                    var newCategory = new Category();
+                    newCategory.CategoryId = x.CategoryId;
+                    newCategory.Name = x.Name;
+                    newCategory.AcceptedEmails = x.AcceptedEmails.Select(y => new Sender { Id = y.Id, Email = y.Email }).ToList();
+                    return newCategory;
+                }
+                ).ToList();
+
+            ManageCategoriesViewModel vm = new ManageCategoriesViewModel
+            {
+                Categories = vmCategories
+            };
+
+            ManageCategories view = new ManageCategories(vm);
+
+            var res = view.ShowDialog();
+            if (res.HasValue && res.Value)
+            {
+                if (manager.UpdateCategories(vm.Categories))
+                {
+                    ShowMessage("Edytowano kategorie");
+                    GetDataFromDatabase();
+                }
+                else
+                {
+                    ShowMessage("Błąd podczas edycji kategorii");
+                }
+            }            
         }
         //-------- DELEGATES
         public delegate void Message(string msg);

@@ -89,6 +89,7 @@
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -138,11 +139,15 @@
       <DependentUpon>ManageCategories.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Sender.cs" />
+    <Compile Include="Popup.xaml.cs">
+      <DependentUpon>Popup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SendEmailView.xaml.cs">
       <DependentUpon>SendEmailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ManageCategoriesViewModel.cs" />
+    <Compile Include="ViewModels\PopupVM.cs" />
     <Compile Include="ViewModels\SendEmailViewModel.cs" />
     <Compile Include="ViewModels\SynchMailViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -158,6 +163,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ManageCategories.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -61,28 +61,22 @@ namespace StudentMailOrganizer.ViewModels
 
         EmailAddressAttribute email;
         RequiredAttribute required;
-        StringLengthAttribute length;
 
 
         public SendEmailViewModel()
         {
             email = new EmailAddressAttribute();
             required = new RequiredAttribute();
-            length = new StringLengthAttribute(30);
-            length.MinimumLength = 5;
         }
 
         public bool isValid()
         {
             var isEmail = email.IsValid(Receiver);
-
             var isReqEmail = required.IsValid(email);
             var isReqTopic = required.IsValid(Topic);
             var isReqBody = required.IsValid(Body);
 
-            var isLengTopic = length.IsValid(Topic);
-
-            bool retval = isEmail && isReqEmail && isReqTopic && isReqBody && isLengTopic;
+            bool retval = isEmail && isReqEmail && isReqTopic && isReqBody;
 
             return retval;
         }
