@@ -4,6 +4,7 @@ using StudentMailOrganizer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,11 @@ namespace StudentMailOrganizer.DAL
     {
         private MailContext db;
         private IMailService _mailer;
+
+        public bool Login(string login, SecureString password)
+        {
+            return _mailer.Login(login, password);
+        }
 
         public bool SendMail(MailMessage mail)
         {
@@ -25,11 +31,16 @@ namespace StudentMailOrganizer.DAL
             db = new MailContext();
         }
 
+        internal bool IsLoggedIn()
+        {
+            return _mailer.IsLoggedIn();
+        }
+
         public SynchMailViewModel Synchronize()
         {
             var emails = _mailer.GetAllMessages().ToList();
             db.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.MailMessageCategories;");
-            db.Database.ExecuteSqlCommand("DELETE FROM dbo.MailMessages WHERE 1=1;");
+            db.Database.ExecuteSqlCommand("DELETE FROM dbo.MailMessages;");
             foreach (var email in emails)
             {
                 db.Emails.Add(email);
@@ -152,25 +163,34 @@ namespace StudentMailOrganizer.DAL
 
         internal bool UpdateCategories(List<Category> categories)
         {
-            var dbCategories = GetCategories();
+            var dbCategories = GetCategories().ToList();
 
             var categoriesToDelete = dbCategories.Select(x => x.CategoryId).Except(categories.Select(y => y.CategoryId));
-            //foreach (var item in categoriesToDelete)
-            //{
-            //    RemoveCategory(dbCategories.First(x => x.CategoryId == item));
-            //}
+            foreach (var item in categoriesToDelete)
+            {
+                RemoveCategory(dbCategories.First(x => x.CategoryId == item));
+            }
 
             var categoriesToEdit = dbCategories.Select(x => x.CategoryId).Intersect(categories.Select(y => y.CategoryId));
+            foreach (var item in categoriesToEdit)
+            {
+                var category = dbCategories.First(x => x.CategoryId == item);
+                var newCat = categories.First(x => x.CategoryId == item);
+                EditCategory(category, newCat.Name, newCat.AcceptedEmails.Select(x=> x.Email).ToList());
+            }
 
-            var categoriesToAdd = categories.Select(x => x.CategoryId).Except(dbCategories.Select(y => y.CategoryId));
-            //foreach (var item in categoriesToAdd)
-            //{
-            //    AddCategory(categories.First(x => x.CategoryId == item));
-            //}
-
-
+            var categoriesToAdd = categories.Where(x => x.CategoryId == 0);
+            foreach (var item in categoriesToAdd)
+            {
+                AddCategory(item);
+            }
 
             return true;
+        }
+
+        internal string GetLogin()
+        {
+            return _mailer.GetCurrentLogin();
         }
     }
 }

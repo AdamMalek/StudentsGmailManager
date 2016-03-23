@@ -14,6 +14,7 @@ namespace StudentMailOrganizer.Infrastructure
 
         readonly Action<object> _execute;
         readonly Predicate<object> _canExecute;
+        private ICommand addCategory;
 
         #endregion // Fields
 
@@ -31,6 +32,11 @@ namespace StudentMailOrganizer.Infrastructure
 
             _execute = execute;
             _canExecute = canExecute;
+        }
+
+        public RelayCommand(ICommand addCategory)
+        {
+            this.addCategory = addCategory;
         }
         #endregion // Constructors
 

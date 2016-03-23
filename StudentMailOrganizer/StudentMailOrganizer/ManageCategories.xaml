@@ -16,9 +16,9 @@
         </ListBox>
         <Label x:Name="label" Content="Foldery:" HorizontalAlignment="Left" Margin="13,2,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label_Copy" Content="Adresy E-mail:" HorizontalAlignment="Left" Margin="250,2,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="Dodaj nowy folder" HorizontalAlignment="Left" Margin="13,33,0,0" VerticalAlignment="Top" Width="230"/>
-        <Button x:Name="button_Copy" Content="Edytuj folder" HorizontalAlignment="Left" Margin="13,341,0,0" VerticalAlignment="Top" Width="111"/>
-        <Button x:Name="button_Copy1" Content="Usuń folder" HorizontalAlignment="Left" Margin="132,341,0,0" VerticalAlignment="Top" Width="111"/>
+        <Button x:Name="button" Content="Dodaj nowy folder" Command="{Binding AddCategory}" HorizontalAlignment="Left" Margin="13,33,0,0" VerticalAlignment="Top" Width="230"/>
+        <Button x:Name="button_Copy" Command="{Binding EditCategory}" Content="Edytuj folder" HorizontalAlignment="Left" Margin="13,341,0,0" VerticalAlignment="Top" Width="111"/>
+        <Button x:Name="button_Copy1" Content="Usuń folder" Command="{Binding RemoveCategory}" HorizontalAlignment="Left" Margin="132,341,0,0" VerticalAlignment="Top" Width="111"/>
         <Button x:Name="button1" Content="Usuń adres" Command="{Binding RemoveFilter}" HorizontalAlignment="Left" Margin="378,341,0,0" VerticalAlignment="Top" Width="91"/>
         <Button x:Name="button2" Content="Anuluj" HorizontalAlignment="Left" Margin="13,398,0,0" VerticalAlignment="Top" Width="111" Click="button2_Click"/>
         <Button x:Name="button2_Copy" Content="OK" HorizontalAlignment="Left" Margin="349,398,0,0" VerticalAlignment="Top" Width="120" Click="button2_Copy_Click"/>

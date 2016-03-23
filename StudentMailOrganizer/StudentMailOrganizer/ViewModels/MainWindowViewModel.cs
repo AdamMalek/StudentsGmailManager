@@ -20,7 +20,13 @@ namespace StudentMailOrganizer.ViewModels
         Category _selectedCategory;
 
         SynchMailViewModel lastReceivedMailData;
-
+        public bool IsLoggedIn
+        {
+            get
+            {
+                return manager.IsLoggedIn();
+            }
+        }
         public List<Category> Categories
         {
             get
@@ -184,8 +190,9 @@ namespace StudentMailOrganizer.ViewModels
             if (res.HasValue && res.Value == true)
             {
                 MailMessage mail = new MailMessage();
-                mail.Sender = vm.Receiver;
+                mail.Receiver = vm.Receiver;
                 mail.Topic = vm.Topic;
+                mail.Sender = manager.GetLogin();
                 mail.Body = vm.Body;
                 mail.MailDate = DateTime.Now;
 
