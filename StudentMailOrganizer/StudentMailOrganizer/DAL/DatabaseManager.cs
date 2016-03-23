@@ -35,6 +35,7 @@ namespace StudentMailOrganizer.DAL
             var emails = _mailer.GetAllMessages().ToList();
 
             db.Emails.RemoveRange(db.Emails.Where(x=> x.Receiver == _currentUser));
+            db.SaveChanges();
 
             foreach (var email in emails)
             {
@@ -62,7 +63,7 @@ namespace StudentMailOrganizer.DAL
 
         public IEnumerable<Category> GetCategories()
         {
-            return db.Categories;//.Include(x=> x.Mails.Where(y=> y.Receiver == _currentUser));
+            return db.Categories.Where(x => x.User == _currentUser);         
         }
         public IEnumerable<MailMessage> GetMessages()
         {
@@ -71,9 +72,8 @@ namespace StudentMailOrganizer.DAL
 
         public bool AddCategory(Category category)
         {
-            //try
-            //{
             category.Mails = new List<MailMessage>();
+            category.User = _currentUser;
             foreach (var filter in category.AcceptedEmails)
             {
                 var emails = db.Emails.Where(x => x.Sender == filter.Email);
@@ -85,17 +85,12 @@ namespace StudentMailOrganizer.DAL
             db.Categories.Add(category);
             db.SaveChanges();
             return true;
-            //}
-            //catch (Exception)
-            //{
-            //    return false;
-            //}
         }
 
         public bool EditCategory(Category category, string name, List<string> filter)
         {
             if (category.CategoryId == -1) return true;
-
+            
             category.Name = name;
 
             var currentFilter = category.AcceptedEmails.Select(x => x.Email);

@@ -161,7 +161,7 @@ namespace StudentMailOrganizer.ViewModels
 
             if (loggedOut)
             {
-                Categories = new List<Category>();
+                Categories = null;
                 SelectedCategory = null;
                 Email = "";
                 RaisePropertyChange("IsLoggedIn");

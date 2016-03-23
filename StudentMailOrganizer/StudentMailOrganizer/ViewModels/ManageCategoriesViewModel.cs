@@ -16,11 +16,11 @@ namespace StudentMailOrganizer.ViewModels
     {
         public ManageCategoriesViewModel()
         {
-            AddFilter = new RelayCommand(AddFilterFunc);
-            RemoveFilter = new RelayCommand(RemoveFilterFunc);
+            AddFilter = new RelayCommand(AddFilterFunc, (obj) => SelectedCategory != null);
+            RemoveFilter = new RelayCommand(RemoveFilterFunc,(obj)=> SelectedFilter!=null);
             AddCategory = new RelayCommand(AddCategoryFunc);
-            EditCategory = new RelayCommand(EditCategoryFunc);
-            RemoveCategory = new RelayCommand(RemoveCategoryFunc);
+            EditCategory = new RelayCommand(EditCategoryFunc, (obj) => SelectedCategory != null);
+            RemoveCategory = new RelayCommand(RemoveCategoryFunc, (obj) => SelectedCategory != null);
         }
         
         List<Category> _categories;
