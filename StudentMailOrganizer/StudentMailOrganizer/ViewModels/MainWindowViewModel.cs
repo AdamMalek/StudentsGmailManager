@@ -24,6 +24,13 @@ namespace StudentMailOrganizer.ViewModels
         Category _selectedCategory;
         JSONHandler _handler = new JSONHandler(SCHEDULER_PATH);
 
+        public List<ScheduleItem> UpcomingEvents {
+            get
+            {
+                return ScheduleItems?.OrderBy(x => x.Date).Where(x => x.Date > DateTime.Now).Take(7).ToList();
+            }
+        }
+
         SynchMailViewModel lastReceivedMailData;
         string _email;
         public string Email { get { return _email; } set { _email = value; RaisePropertyChange("Email"); } }
@@ -64,7 +71,7 @@ namespace StudentMailOrganizer.ViewModels
         {
             get
             {
-                return _categoryItems;
+                return _categoryItems.OrderByDescending(x=> x.MailDate).ToList();
             }
             set
             {
@@ -133,7 +140,8 @@ namespace StudentMailOrganizer.ViewModels
             set
             {
                 _scheduleItems = value;
-                SaveScheduler();
+                SaveScheduler();                
+                RaisePropertyChange("UpcomingEvents");
                 RaisePropertyChange("ScheduleItems");
             }
         }

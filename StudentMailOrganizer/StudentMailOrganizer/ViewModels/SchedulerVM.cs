@@ -18,7 +18,7 @@ namespace StudentMailOrganizer.ViewModels
         {
             get
             {
-                return ScheduleItems.Where(x => (x.Date.Year == SelectedDate.Year) && (x.Date.Month == SelectedDate.Month) && (x.Date.Day == SelectedDate.Day)).ToList();
+                return ScheduleItems.Where(x => (x.Date.Year == SelectedDate.Year) && (x.Date.Month == SelectedDate.Month) && (x.Date.Day == SelectedDate.Day)).OrderBy(x=> x.Date).ToList();
             }
         }
         DateTime _selectedDate = DateTime.Now;

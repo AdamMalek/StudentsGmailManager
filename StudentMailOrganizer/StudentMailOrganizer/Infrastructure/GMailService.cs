@@ -32,24 +32,18 @@ namespace StudentMailOrganizer.Infrastructure
         {
             if (IsLoggedIn())
             {
-                //try
-                //{
-<<<<<<< HEAD
-                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 465);              
-=======
-                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-                
->>>>>>> origin/master
-                
-                smtpClient.Credentials = nc;
-                smtpClient.EnableSsl = true;
-                smtpClient.Send(email.Sender, email.Receiver, email.Topic, email.Body);
-                return true;
-                //}
-                //catch (Exception)
-                //{
-                //    return false;
-                //}
+                try
+                {
+                    SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+                    smtpClient.Credentials = nc;
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Send(email.Sender, email.Receiver, email.Topic, email.Body.Trim());
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
             else
             {
