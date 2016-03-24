@@ -3,25 +3,17 @@ using StudentMailOrganizer.Models;
 using StudentMailOrganizer.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 
 namespace StudentMailOrganizer.Infrastructure
 {
     public class JSONHandler
     {
-        private string _path;
+        private string _path = ConfigurationManager.AppSettings["JsonLocation"];
         JsonSerializer _js = new JsonSerializer();
         JsonTextReader _reader;
         JsonTextWriter _writer;
-
-        public JSONHandler(string path)
-        {
-            _path = path;
-        }
 
         public List<ScheduleItem> LoadScheduler()
         {
@@ -29,11 +21,11 @@ namespace StudentMailOrganizer.Infrastructure
             {
                 StreamReader json = new StreamReader(_path);
                 _reader = new JsonTextReader(json);
-                var scheduler = _js.Deserialize<List<ScheduleItem>>(_reader);
+                var scheduler = _js.Deserialize<ScheduleStoreModel>(_reader);
                 json.Close();
                 if (scheduler != null)
                 {
-                    return scheduler;
+                    return scheduler.Items;
                 }
                 else
                 {
@@ -53,7 +45,10 @@ namespace StudentMailOrganizer.Infrastructure
             {
                 StreamWriter json = new StreamWriter(_path);
                 _writer = new JsonTextWriter(json);
-                _js.Serialize(_writer, schedulerItems);
+                ScheduleStoreModel data = new ScheduleStoreModel();
+                data.Items = schedulerItems;
+                data.Id = Guid.NewGuid();
+                _js.Serialize(_writer, data);
                 json.Close();
                 return true;
             }

@@ -5,24 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace StudentMailOrganizer.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        const string SCHEDULER_PATH = @"c:/Scheduler/data.json";
-
         List<Category> _categories;
         List<MailMessage> _categoryItems;
         List<ScheduleItem> _scheduleItems;
         MailMessage _selectedMail;
         DateTime _selectedDate;
         Category _selectedCategory;
-        JSONHandler _handler = new JSONHandler(SCHEDULER_PATH);
+        JSONHandler _handler = new JSONHandler();
 
         public List<ScheduleItem> UpcomingEvents {
             get
