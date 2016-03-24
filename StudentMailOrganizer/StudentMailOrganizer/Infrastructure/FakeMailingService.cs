@@ -13,7 +13,7 @@ namespace StudentMailOrganizer.Infrastructure
     {
         private List<MailMessage> _messages = new List<MailMessage>();
 
-        private Dictionary<string, SecureString> accounts = new Dictionary<string, SecureString>();
+        private Dictionary<string, string> accounts = new Dictionary<string, string>();
 
         string _currentUser = "no-logon";
 
@@ -150,20 +150,8 @@ namespace StudentMailOrganizer.Infrastructure
             _messages.Add(m10);
             _messages.Add(m11);
 
-            var password1 = new SecureString();
-            password1.AppendChar('t');
-            password1.AppendChar('e');
-            password1.AppendChar('s');
-            password1.AppendChar('t');
-            password1.AppendChar('1');
-            var password2 = new SecureString();
-            password2.AppendChar('t');
-            password2.AppendChar('e');
-            password2.AppendChar('s');
-            password2.AppendChar('t');
-            password2.AppendChar('2');
-            accounts.Add("acc1@acc.com", password1);
-            accounts.Add("acc2@acc.com", password2);
+            accounts.Add("acc1@acc.com", "test1");
+            accounts.Add("acc2@acc.com", "test2");
         }
 
         public IEnumerable<MailMessage> GetAllMessages()
@@ -171,51 +159,22 @@ namespace StudentMailOrganizer.Infrastructure
             return _messages.Where(x => x.Receiver == _currentUser);
         }
 
-        public bool Login(string login, SecureString password)
+        public bool SendMessage(MailMessage email)
+        {
+            return (new Random().NextDouble() > 0.5);
+        }
+
+        public bool Login(string login, string password)
         {
             if (accounts.Keys.Contains(login))
             {
-                if (IsEqualTo(accounts[login], password))
+                if (accounts[login] == password)
                 {
                     _currentUser = login;
                     return true;
                 }
             }
             return false;
-        }
-
-        public static bool IsEqualTo(SecureString ss1, SecureString ss2)
-        {
-            IntPtr bstr1 = IntPtr.Zero;
-            IntPtr bstr2 = IntPtr.Zero;
-            try
-            {
-                bstr1 = Marshal.SecureStringToBSTR(ss1);
-                bstr2 = Marshal.SecureStringToBSTR(ss2);
-                int length1 = Marshal.ReadInt32(bstr1, -4);
-                int length2 = Marshal.ReadInt32(bstr2, -4);
-                if (length1 == length2)
-                {
-                    for (int x = 0; x < length1; ++x)
-                    {
-                        byte b1 = Marshal.ReadByte(bstr1, x);
-                        byte b2 = Marshal.ReadByte(bstr2, x);
-                        if (b1 != b2) return false;
-                    }
-                }
-                else return false;
-                return true;
-            }
-            finally
-            {
-                if (bstr2 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr2);
-                if (bstr1 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr1);
-            }
-        }
-
-        public bool SendMessage(MailMessage email)
-        {
-            return (new Random().NextDouble() > 0.5);
         }
 
         public bool IsLoggedIn()

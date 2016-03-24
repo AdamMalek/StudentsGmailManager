@@ -32,7 +32,7 @@ namespace StudentMailOrganizer
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindowViewModel)DataContext).Login(passwordBox.SecurePassword);
+            ((MainWindowViewModel)DataContext).Login(passwordBox.Password);
             passwordBox.Password = "";
         }
     }

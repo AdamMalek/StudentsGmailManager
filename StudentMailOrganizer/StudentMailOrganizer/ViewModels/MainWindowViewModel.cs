@@ -121,7 +121,7 @@ namespace StudentMailOrganizer.ViewModels
 
         public MainWindowViewModel()
         {
-            manager = new MailManager(new FakeMailingService());
+            manager = new MailManager();
             Synchronize = new RelayCommand((obj) =>
             {
                 lastReceivedMailData = manager.Synchronize();
@@ -139,7 +139,7 @@ namespace StudentMailOrganizer.ViewModels
             Categories = lastReceivedMailData.Categories;
         }
 
-        public void Login(SecureString password)
+        public void Login(string password)
         {
             var loggedIn = manager.Login(Email, password);
 

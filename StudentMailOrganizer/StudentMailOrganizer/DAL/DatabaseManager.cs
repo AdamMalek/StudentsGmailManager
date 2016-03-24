@@ -23,9 +23,9 @@ namespace StudentMailOrganizer.DAL
             return _mailer.SendMessage(mail);
         }
 
-        public MailManager(IMailService mailer)
+        public MailManager()
         {
-            _mailer = mailer;
+            _mailer = new GMailService();
             db = new MailContext();
         }
 
@@ -188,7 +188,7 @@ namespace StudentMailOrganizer.DAL
             }
             return false;
         }
-        public bool Login(string login, SecureString password)
+        public bool Login(string login, string password)
         {
             var logged = _mailer.Login(login, password);
             if (logged)

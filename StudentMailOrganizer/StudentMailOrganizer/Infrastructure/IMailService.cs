@@ -12,7 +12,7 @@ namespace StudentMailOrganizer.Infrastructure
     {
         IEnumerable<MailMessage> GetAllMessages();
         bool SendMessage(MailMessage email);
-        bool Login(string login, SecureString password);
+        bool Login(string login, string password);
         bool IsLoggedIn();
         string GetCurrentLogin();
         bool Logout();
