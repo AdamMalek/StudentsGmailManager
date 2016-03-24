@@ -14,11 +14,15 @@ namespace StudentMailOrganizer.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        const string SCHEDULER_PATH = @"c:/Scheduler/data.json";
+
         List<Category> _categories;
         List<MailMessage> _categoryItems;
+        List<ScheduleItem> _scheduleItems;
         MailMessage _selectedMail;
         DateTime _selectedDate;
         Category _selectedCategory;
+        JSONHandler _handler = new JSONHandler(SCHEDULER_PATH);
 
         SynchMailViewModel lastReceivedMailData;
         string _email;
@@ -116,6 +120,23 @@ namespace StudentMailOrganizer.ViewModels
             }
         }
         public bool IsMailSelected { get { return SelectedMail != null; } }
+        public List<ScheduleItem> ScheduleItems
+        {
+            get
+            {
+                if (_scheduleItems == null)
+                {
+                    LoadScheduler();
+                }
+                return _scheduleItems;
+            }
+            set
+            {
+                _scheduleItems = value;
+                SaveScheduler();
+                RaisePropertyChange("ScheduleItems");
+            }
+        }
 
         MailManager manager;
 
@@ -130,8 +151,8 @@ namespace StudentMailOrganizer.ViewModels
             SendMail = new RelayCommand(SendMessage);
             ManageCategory = new RelayCommand(ManageCategoriesFunc);
             Logout = new RelayCommand(LogoutFunc);
+            ManageScheduler = new RelayCommand(ManageSchedulerFunc);
         }
-
 
         private void GetDataFromDatabase()
         {
@@ -219,6 +240,7 @@ namespace StudentMailOrganizer.ViewModels
         public ICommand SendMail { get; set; }
         public ICommand ManageCategory { get; set; }
         public ICommand Logout { get; set; }
+        public ICommand ManageScheduler { get; set; }
 
         private void SendMessage(object obj)
         {
@@ -267,6 +289,34 @@ namespace StudentMailOrganizer.ViewModels
                     }
                     ShowMessage("Błąd podczas wysyłania wiadomości");
                 }
+            }
+        }
+
+        private void ManageSchedulerFunc(object obj)
+        {
+            SchedulerVM vm = new SchedulerVM()
+            {
+                ScheduleItems = ScheduleItems.Select(x => new ScheduleItem { Date = x.Date, Description = x.Description }).ToList()
+            };
+            Scheduler view = new Scheduler(vm);
+            var res = view.ShowDialog();
+            if (res.HasValue && res.Value)
+            {
+                ScheduleItems = vm.ScheduleItems;
+            }
+        }
+
+        private void LoadScheduler()
+        {
+            _scheduleItems = _handler.LoadScheduler();
+        }
+
+        private void SaveScheduler()
+        {
+            var result = _handler.SaveScheduler(_scheduleItems);
+            if (!result)
+            {
+                ShowMessage("Błąd podczas zapisu na dysku!");
             }
         }
 

@@ -17,7 +17,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Calendar HorizontalAlignment="Left" Margin="806,47,0,0" VerticalAlignment="Top" SelectedDate="{Binding SelectedDate}" Height="168"/>
         <TextBox x:Name="EmailSender" HorizontalAlignment="Left" Height="21" Margin="311,306,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Sender}" VerticalAlignment="Top" Width="490" IsReadOnly="True"/>
         <TextBox x:Name="EmailTopic" HorizontalAlignment="Left" Height="21" Margin="311,332,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Topic}" VerticalAlignment="Top" Width="490" IsReadOnly="True" />
         <TextBox x:Name="EmailMessage" HorizontalAlignment="Left" Height="217" Margin="240,362,0,0" TextWrapping="Wrap" Text="{Binding SelectedMail.Body}" VerticalAlignment="Top" Width="744" IsReadOnly="True"/>
@@ -33,7 +32,7 @@
         </DataGrid>
         <Button x:Name="button3" Command="{Binding SendMail}" CommandParameter="reply" Content="Odpowiedz na wiadomość" IsEnabled="{Binding IsMailSelected}" HorizontalAlignment="Left" Margin="806,306,0,0" VerticalAlignment="Top" Width="179" Height="47"/>
         <Button x:Name="button3_Copy" IsEnabled="{Binding IsLoggedIn}" Command="{Binding SendMail}" CommandParameter="new" Content="Wyślij nową wiadomość" HorizontalAlignment="Left" Margin="806,253,0,0" VerticalAlignment="Top" Width="179" Height="47"/>
-        <Button x:Name="button1" IsEnabled="{Binding IsLoggedIn}" Content="Zarządzaj przypomnieniami" HorizontalAlignment="Left" Margin="806,220,0,0" VerticalAlignment="Top" Width="179" Height="29"/>
+        <Button x:Name="button1" Content="Zarządzaj przypomnieniami" Command="{Binding ManageScheduler}" HorizontalAlignment="Left" Margin="806,220,0,0" VerticalAlignment="Top" Width="179" Height="29"/>
         <Button x:Name="button1_Copy" IsEnabled="{Binding IsLoggedIn}" Command="{Binding ManageCategory}" Content="Zarządzaj folderami maili" HorizontalAlignment="Left" Margin="10,547,0,0" VerticalAlignment="Top" Width="225" Height="32"/>
         <Label x:Name="label1"  Visibility="{Binding IsNotLoggedIn, Converter={StaticResource BoolToVisConverter}}" Content="E-mail:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textBox" Visibility="{Binding IsNotLoggedIn, Converter={StaticResource BoolToVisConverter}}" HorizontalAlignment="Left" Height="23" Margin="61,13,0,0" TextWrapping="Wrap" Text="{Binding Email}" VerticalAlignment="Top" Width="195"/>

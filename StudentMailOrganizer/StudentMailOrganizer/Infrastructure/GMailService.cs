@@ -34,8 +34,7 @@ namespace StudentMailOrganizer.Infrastructure
             {
                 //try
                 //{
-                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 465);
-                
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 465);              
                 
                 smtpClient.Credentials = nc;
                 smtpClient.EnableSsl = true;

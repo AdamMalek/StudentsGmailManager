@@ -10,7 +10,7 @@
         <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="10,41,0,0" TextWrapping="Wrap" Text="{Binding PopupText}" VerticalAlignment="Top" Width="272"/>
         <Label x:Name="label" Content="{Binding PopupLabel}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <Button x:Name="button" Content="Anuluj" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        <Button x:Name="button_Copy" Content="OK" HorizontalAlignment="Left" Margin="207,69,0,0" VerticalAlignment="Top" Width="75" Click="button_Copy_Click"/>
+        <Button x:Name="button_Copy" IsDefault="True" Content="OK" HorizontalAlignment="Left" Margin="207,69,0,0" VerticalAlignment="Top" Width="75" Click="button_Copy_Click"/>
 
     </Grid>
 </Window>
