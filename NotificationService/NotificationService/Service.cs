@@ -11,7 +11,6 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Topshelf;
 
 namespace NotificationService
 {
@@ -22,6 +21,8 @@ namespace NotificationService
         IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
         public Service()
         {
+            string path = ConfigurationManager.AppSettings["JsonFolder"] + "/" + ConfigurationManager.AppSettings["JsonFileName"];
+            jsHnd = new JSONHandler(path);
             fw = new FileSystemWatcher();
             fw.Filter = ConfigurationManager.AppSettings["JsonFileName"];
             fw.NotifyFilter = NotifyFilters.LastWrite;
@@ -49,8 +50,6 @@ namespace NotificationService
 
         protected override void OnStart(string[] args)
         {
-            string path = ConfigurationManager.AppSettings["JsonFolder"] + "/" + ConfigurationManager.AppSettings["JsonFileName"];
-            jsHnd = new JSONHandler(path);
             fw.EnableRaisingEvents = true;
             Update();
             scheduler.Start();
@@ -85,7 +84,6 @@ namespace NotificationService
 
         private void Update()
         {
-            System.Threading.Thread.Sleep(100); // by zapobiec odczytowi pliku zanim zostanie on zamknięty w innym programie.
             scheduler.Clear();
             _items = jsHnd.LoadScheduler().OrderBy(x => x.Date).Where(x => x.Date > DateTime.Now).ToList();
             if (_items != null)

@@ -16,28 +16,40 @@ namespace StudentMailOrganizer.Infrastructure
         public JSONHandler(string path)
         {
             _path = path;
+            if (!Directory.Exists(ConfigurationManager.AppSettings["JsonFolder"]))
+            {
+                Directory.CreateDirectory(ConfigurationManager.AppSettings["JsonFolder"]);
+            }
         }
 
         public List<ScheduleItem> LoadScheduler()
         {
             if (File.Exists(_path))
             {
-                StreamReader json = new StreamReader(_path);
-                _reader = new JsonTextReader(json);
-                var scheduler = _js.Deserialize<ScheduleStoreModel>(_reader);
-                json.Close();
-                if (scheduler != null)
+                try
                 {
-                    return scheduler.Items;
+                    StreamReader json = new StreamReader(_path);
+                    _reader = new JsonTextReader(json);
+                    var scheduler = _js.Deserialize<ScheduleStoreModel>(_reader);
+                    json.Close();
+                    if (scheduler != null)
+                    {
+                        return scheduler.Items;
+                    }
+                    else
+                    {
+                        return new List<ScheduleItem>();
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    return new List<ScheduleItem>();
+                    System.Threading.Thread.Sleep(1000);
+                    return LoadScheduler();
                 }
             }
             else
             {
-                File.Create(_path);
+                File.Create(_path).Close();
                 return new List<ScheduleItem>();
             }
         }        

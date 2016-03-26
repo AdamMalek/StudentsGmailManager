@@ -10,31 +10,47 @@ namespace StudentMailOrganizer.Infrastructure
 {
     public class JSONHandler
     {
-        private string _path = ConfigurationManager.AppSettings["JsonLocation"];
+        private string _path = ConfigurationManager.AppSettings["JsonFolder"] + "/" + ConfigurationManager.AppSettings["JsonFileName"];
         JsonSerializer _js = new JsonSerializer();
         JsonTextReader _reader;
         JsonTextWriter _writer;
+
+        public JSONHandler()
+        {
+            if (!Directory.Exists(ConfigurationManager.AppSettings["JsonFolder"]))
+            {
+                Directory.CreateDirectory(ConfigurationManager.AppSettings["JsonFolder"]);
+            }
+        }
 
         public List<ScheduleItem> LoadScheduler()
         {
             if (File.Exists(_path))
             {
-                StreamReader json = new StreamReader(_path);
-                _reader = new JsonTextReader(json);
-                var scheduler = _js.Deserialize<ScheduleStoreModel>(_reader);
-                json.Close();
-                if (scheduler != null)
+                try
                 {
-                    return scheduler.Items;
+                    StreamReader json = new StreamReader(_path);
+                    _reader = new JsonTextReader(json);
+                    var scheduler = _js.Deserialize<ScheduleStoreModel>(_reader);
+                    json.Close();
+                    if (scheduler != null)
+                    {
+                        return scheduler.Items;
+                    }
+                    else
+                    {
+                        return new List<ScheduleItem>();
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    return new List<ScheduleItem>();
+                    System.Threading.Thread.Sleep(1000);
+                    return LoadScheduler();
                 }
             }
             else
             {
-                File.Create(_path);
+                File.Create(_path).Close();
                 return new List<ScheduleItem>();
             }
         }
