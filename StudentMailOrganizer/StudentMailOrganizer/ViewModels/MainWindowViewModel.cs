@@ -66,7 +66,7 @@ namespace StudentMailOrganizer.ViewModels
         {
             get
             {
-                return _categoryItems.OrderByDescending(x=> x.MailDate).ToList();
+                return _categoryItems?.OrderByDescending(x=> x.MailDate).ToList();
             }
             set
             {
