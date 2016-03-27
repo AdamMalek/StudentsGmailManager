@@ -19,7 +19,8 @@ namespace StudentMailOrganizer.ViewModels
         Category _selectedCategory;
         JSONHandler _handler = new JSONHandler();
 
-        public List<ScheduleItem> UpcomingEvents {
+        public List<ScheduleItem> UpcomingEvents
+        {
             get
             {
                 return ScheduleItems?.OrderBy(x => x.Date).Where(x => x.Date > DateTime.Now).Take(7).ToList();
@@ -66,7 +67,7 @@ namespace StudentMailOrganizer.ViewModels
         {
             get
             {
-                return _categoryItems?.OrderByDescending(x=> x.MailDate).ToList();
+                return _categoryItems?.OrderByDescending(x => x.MailDate).ToList();
             }
             set
             {
@@ -135,7 +136,7 @@ namespace StudentMailOrganizer.ViewModels
             set
             {
                 _scheduleItems = value;
-                SaveScheduler();                
+                SaveScheduler();
                 RaisePropertyChange("UpcomingEvents");
                 RaisePropertyChange("ScheduleItems");
             }
@@ -146,26 +147,43 @@ namespace StudentMailOrganizer.ViewModels
         public MainWindowViewModel()
         {
             manager = new MailManager();
-            Synchronize = new RelayCommand((obj) =>
-            {
-                lastReceivedMailData = manager.Synchronize();
-                Categories = lastReceivedMailData.Categories;
-            });
             SendMail = new RelayCommand(SendMessage);
+            CreateCommands();
+        }
+
+        private void CreateCommands()
+        {
             ManageCategory = new RelayCommand(ManageCategoriesFunc);
             Logout = new RelayCommand(LogoutFunc);
             ManageScheduler = new RelayCommand(ManageSchedulerFunc);
+            Synchronize = new RelayCommand(SyncFunc);
         }
 
-        private void GetDataFromDatabase()
+        private async void SyncFunc(object obj)
         {
-            lastReceivedMailData = manager.GetDataFromDatabase();
+            WorkMsg = "Trwa synchronizacja";
+            IsWorking = true;
+            lastReceivedMailData = await manager.Synchronize();
             Categories = lastReceivedMailData.Categories;
+            WorkMsg = "";
+            IsWorking = false;
         }
 
-        public void Login(string password)
+        private async void GetDataFromDatabase()
         {
-            var loggedIn = manager.Login(Email, password);
+            WorkMsg = "Pobieranie z bazy";
+            IsWorking = true;
+            lastReceivedMailData = await manager.GetDataFromDatabase();
+            Categories = lastReceivedMailData.Categories;
+            WorkMsg = "";
+            IsWorking = false;
+        }
+
+        public async void Login(string password)
+        {
+            WorkMsg = "Logowanie...";
+            IsWorking = true;
+            bool loggedIn = await manager.Login(Email, password);
 
             if (loggedIn)
             {
@@ -177,6 +195,8 @@ namespace StudentMailOrganizer.ViewModels
             {
                 ShowMessage("Nie udało się zalogować!");
             }
+            WorkMsg = "";
+            IsWorking = false;
         }
 
         private void LogoutFunc(object obj)
@@ -196,54 +216,45 @@ namespace StudentMailOrganizer.ViewModels
                 ShowMessage("Nie udało się wylogować!");
             }
         }
-
-        //--------- TEST ----
-        public void XD()
-        {
-            SeedCategories();
-            //Synchronize();
-        }
-        public void RemoveCategory()
-        {
-            var cat = Categories.Last();
-            var name = "XDD";
-            var newFilters = new List<string>
-            {
-                "admin@admin.com",
-                "admin5@admin.com",
-                "admin3@admin.com"
-            };
-            manager.EditCategory(cat, name, newFilters);
-            GetDataFromDatabase();
-        }
-        private void SeedCategories()
-        {
-            manager.AddCategory(new Category
-            {
-                Name = "Programowanie",
-                AcceptedEmails = new List<Sender>
-                {
-                    new Sender { Email= "admin@admin.com" },
-                    new Sender { Email= "admin3@admin.com" }
-                }
-            });
-            manager.AddCategory(new Category
-            {
-                Name = "Systemy Operacyjne",
-                AcceptedEmails = new List<Sender>
-                {
-                    new Sender { Email= "admin2@admin.com" },
-                    new Sender { Email= "admin3@admin.com" }
-                }
-            });
-        }
-
+        
         //--------- COMMANDS ---------------
         public ICommand Synchronize { get; set; }
         public ICommand SendMail { get; set; }
         public ICommand ManageCategory { get; set; }
         public ICommand Logout { get; set; }
         public ICommand ManageScheduler { get; set; }
+
+        string _workMsg;
+
+        public bool IsWorking
+        {
+            get
+            {
+                return _isWorking;
+            }
+
+            set
+            {
+                _isWorking = value;
+                RaisePropertyChange("IsWorking");
+            }
+        }
+
+        public string WorkMsg
+        {
+            get
+            {
+                return _workMsg;
+            }
+
+            set
+            {
+                _workMsg = value;
+                RaisePropertyChange("WorkMsg");
+            }
+        }
+
+        bool _isWorking;
 
         private void SendMessage(object obj)
         {

@@ -13,5 +13,11 @@ namespace StudentMailOrganizer
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            string executable = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string path = (System.IO.Path.GetDirectoryName(executable));
+            AppDomain.CurrentDomain.SetData("DataDirectory", path);
+        }
     }
 }

@@ -55,7 +55,7 @@ namespace StudentMailOrganizer.ViewModels
         {
             get
             {
-                return SelectedCategory.AcceptedEmails.ToList();
+                return SelectedCategory?.AcceptedEmails.ToList();
             }
             set
             {

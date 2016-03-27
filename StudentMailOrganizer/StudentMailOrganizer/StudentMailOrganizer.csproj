@@ -117,7 +117,6 @@
     </ApplicationDefinition>
     <Compile Include="DAL\Context.cs" />
     <Compile Include="DAL\DatabaseManager.cs" />
-    <Compile Include="Infrastructure\FakeMailingService.cs" />
     <Compile Include="Infrastructure\GMailService.cs" />
     <Compile Include="Infrastructure\IMailService.cs" />
     <Compile Include="Infrastructure\JSONHandler.cs" />

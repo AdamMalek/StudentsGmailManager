@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentMailOrganizer"
         mc:Ignorable="d"
-        Title="Student Mail Organizer" Height="617.89" Width="1113.357" ResizeMode="NoResize">
+        Title="Student Mail Organizer" Height="655.39" Width="1113.357" ResizeMode="NoResize">
     <Grid>
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
@@ -54,5 +54,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <ProgressBar HorizontalAlignment="Left" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" IsIndeterminate="True" Height="10" Margin="983,584,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="label4" Content="{Binding WorkMsg}" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" HorizontalAlignment="Left" Margin="856,584,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

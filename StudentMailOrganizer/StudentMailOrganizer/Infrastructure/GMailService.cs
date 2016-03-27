@@ -18,7 +18,7 @@ namespace StudentMailOrganizer.Infrastructure
             {
                 var msg = imapClient.GetMessages(0, imapClient.GetMessageCount() - 1, false, false);
 
-                var ret = msg.Select(x => new Models.MailMessage { Body = x.Body, Sender = x.From.Address, Receiver = x.To.Select(y => y.Address).First(), MailDate = x.Date, Topic = x.Subject });
+                var ret = msg.Select(x => new Models.MailMessage { Body = x.Body, Sender = x.From.Address, Receiver = _currentUser, MailDate = x.Date, Topic = x.Subject });
                 return ret;
             }
             return null;

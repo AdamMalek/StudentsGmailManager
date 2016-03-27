@@ -3,6 +3,8 @@ using StudentMailOrganizer.Models;
 using StudentMailOrganizer.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace StudentMailOrganizer.DAL
 {
@@ -25,44 +27,55 @@ namespace StudentMailOrganizer.DAL
         }
 
 
-        public SynchMailViewModel Synchronize()
+        public async Task<SynchMailViewModel> Synchronize()
         {
-            var emails = _mailer.GetAllMessages().ToList();
+            var ret = await Task.Run(() =>
+            {
+                var emails = _mailer.GetAllMessages().ToList();
 
-            db.Emails.RemoveRange(db.Emails.Where(x=> x.Receiver == _currentUser));
+                db.Emails.RemoveRange(db.Emails.Where(x => x.Receiver == _currentUser));
+                db.SaveChanges();
+
+                foreach (var email in emails)
+                {
+                    db.Emails.Add(email);
+                }
+                var categories = SortMessages(emails);
+                db.SaveChanges();
+
+                SynchMailViewModel vm = new SynchMailViewModel()
+                {
+                    Emails = emails,
+                    Categories = categories.ToList()
+                };
+
+                return vm;
+            });
+
             db.SaveChanges();
 
-            foreach (var email in emails)
-            {
-                db.Emails.Add(email);
-            }
-            var categories = SortMessages(emails);
-            db.SaveChanges();
-
-            SynchMailViewModel vm = new SynchMailViewModel()
-            {
-                Emails = emails,
-                Categories = categories.ToList()
-            };
-
-            return vm;
+            return ret;
         }
 
-        public SynchMailViewModel GetDataFromDatabase()
+        public async Task<SynchMailViewModel> GetDataFromDatabase()
         {
-            var vm = new SynchMailViewModel();
-            vm.Categories = GetCategories().ToList();
-            vm.Emails = GetMessages().ToList();
-            return vm;
+            var ret = await Task.Run(() =>
+            {
+                var vm = new SynchMailViewModel();
+                vm.Categories = GetCategories().ToList();
+                vm.Emails = GetMessages().ToList();
+                return vm;
+            });
+            return ret;
         }
 
         public IEnumerable<Category> GetCategories()
         {
-            return db.Categories.Where(x => x.User == _currentUser);         
+            return db.Categories.Where(x => x.User == _currentUser);
         }
         public IEnumerable<MailMessage> GetMessages()
         {
-            return db.Emails.Where(x=> x.Receiver == _currentUser);
+            return db.Emails.Where(x => x.Receiver == _currentUser);
         }
 
         public bool AddCategory(Category category)
@@ -85,7 +98,7 @@ namespace StudentMailOrganizer.DAL
         public bool EditCategory(Category category, string name, List<string> filter)
         {
             if (category.CategoryId == -1) return true;
-            
+
             category.Name = name;
 
             var currentFilter = category.AcceptedEmails.Select(x => x.Email);
@@ -160,7 +173,7 @@ namespace StudentMailOrganizer.DAL
             {
                 var category = dbCategories.First(x => x.CategoryId == item);
                 var newCat = categories.First(x => x.CategoryId == item);
-                EditCategory(category, newCat.Name, newCat.AcceptedEmails.Select(x=> x.Email).ToList());
+                EditCategory(category, newCat.Name, newCat.AcceptedEmails.Select(x => x.Email).ToList());
             }
 
             var categoriesToAdd = categories.Where(x => x.CategoryId == 0);
@@ -175,7 +188,7 @@ namespace StudentMailOrganizer.DAL
 
         public bool Logout()
         {
-            bool loggedOut =_mailer.Logout();
+            bool loggedOut = _mailer.Logout();
             if (loggedOut)
             {
                 _currentUser = "no-logon";
@@ -183,16 +196,18 @@ namespace StudentMailOrganizer.DAL
             }
             return false;
         }
-        public bool Login(string login, string password)
+
+        public async Task<bool> Login(string login, string password)
         {
-            var logged = _mailer.Login(login, password);
-            if (logged)
+            bool res = await Task.Run(() => res = _mailer.Login(login, password));
+            if (res)
             {
                 _currentUser = login;
                 return true;
             }
-            return false;
+            return res;
         }
+
         internal bool IsLoggedIn()
         {
             return _mailer.IsLoggedIn();
