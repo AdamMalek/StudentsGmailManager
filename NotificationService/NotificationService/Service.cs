@@ -20,7 +20,7 @@ namespace NotificationService
         JSONHandler jsHnd;
         IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
         public Service()
-        {
+        {     
             string path = ConfigurationManager.AppSettings["JsonFolder"] + "/" + ConfigurationManager.AppSettings["JsonFileName"];
             jsHnd = new JSONHandler(path);
             fw = new FileSystemWatcher();
@@ -106,6 +106,15 @@ namespace NotificationService
                 string msg = desc[1];
                 MessageBox.Show(msg,date,MessageBoxButtons.OK,MessageBoxIcon.Warning);
             }
+        }
+
+        private void InitializeComponent()
+        {
+            // 
+            // Service
+            // 
+            this.ServiceName = "NotificationService";
+
         }
     }
 }
